@@ -24,6 +24,7 @@ dependencies:
 - split
 - containers
 - megaparsec
+- mtl
 
 ghc-options:
 - -Wall
