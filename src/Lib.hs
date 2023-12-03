@@ -5,10 +5,12 @@ module Lib
 import Lazy
 import Day01
 import Day02
+import Day03
 
 getDay :: Int -> (String -> (String,String))
 getDay 1 = day01
 getDay 2 = day02
+getDay 3 = day03
 getDay _ = day01
 
 advent :: IO ()

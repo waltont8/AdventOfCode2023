@@ -10,6 +10,7 @@ module Lazy (
     module Data.Function,
     module Debug.Trace,
     module System.Environment,
+    module Data.Maybe,
     listSplit,
     mapInc,
     mapAdd,
@@ -38,6 +39,7 @@ import Control.Monad
 import Data.List
 import Data.Char
 import Data.List.Split
+import Data.Maybe
 import Data.Function (on)
 import qualified Data.Map as M
 import qualified Data.Set as S
