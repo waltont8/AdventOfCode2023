@@ -30,7 +30,8 @@ module Lazy (
     readSignedInt,
     toDec,
     readChar,
-    firstInt
+    firstInt,
+    readInt
 
 ) where
 
@@ -101,6 +102,9 @@ rightPointGrid :: Grid a -> (Int, Int)
 rightPointGrid (Grid m _) = head $ sortBy (flip compare `on` fst) $ (M.keys m)
 
 -- reads
+
+readInt :: String -> Int
+readInt = read
 readSignedInt :: String -> Integer
 readSignedInt (h:xs) = case h of
                     '-' -> ((read xs)::Integer) * (-1)
