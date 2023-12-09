@@ -31,7 +31,8 @@ module Lazy (
     toDec,
     readChar,
     firstInt,
-    readInt
+    readInt,
+    replaceAll
 
 ) where
 
@@ -105,12 +106,13 @@ rightPointGrid (Grid m _) = head $ sortBy (flip compare `on` fst) $ (M.keys m)
 
 readInt :: String -> Int
 readInt = read
-readSignedInt :: String -> Integer
-readSignedInt (h:xs) = case h of
-                    '-' -> ((read xs)::Integer) * (-1)
-                    '+' -> (read xs)::Integer
-                    _ -> error "+/- passed to readSignedInt"
-readSignedInt _ = error "error in readSignedInt"
+
+readSignedInt :: String -> Int
+readSignedInt a@(h:xs)
+                    | h == '-' = ((read xs)::Int) * (-1)
+                    | h == '+' = (read xs)::Int
+                    | isDigit h = (read a)::Int
+                    | otherwise = error "+/- passed to readSignedInt"
 
 readChar :: Char -> Int
 readChar '0' = 0
@@ -141,3 +143,7 @@ firstInt (h:xs) = read num
   where
     afterDroppingNonDigits = dropWhile (not . isDigit) xs
     num = takeWhile isDigit afterDroppingNonDigits
+
+
+replaceAll :: Eq t => t -> t -> [t] -> [t]
+replaceAll x y = map (\h -> if h == x then y else h)
