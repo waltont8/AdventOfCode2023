@@ -22,12 +22,14 @@ parse s = Map s (length (head s)) (length s)
 part1 :: Map -> Int
 part1 m = sum . catMaybes $ allParts
     where
-        allParts = map (getPartNumber m) [(x,y) | x <- [0..(width m - 1)], y <- [0..(height m - 1)]]
+        allParts = [getPartNumber m (x, y) |
+                      x <- [0 .. (width m - 1)], y <- [0 .. (height m - 1)]]
 
 part2 :: Map -> Int
 part2 m = sum ratios
     where
-        allParts = map (getGearNumber m) [(x,y) | x <- [0..(width m - 1)], y <- [0..(height m - 1)]]
+        allParts = [getGearNumber m (x, y) |
+                      x <- [0 .. (width m - 1)], y <- [0 .. (height m - 1)]]
         sorted = sortBy (\(_,a) (_,b) -> compare a b) (catMaybes allParts)
         ratios = ratio sorted
 
@@ -35,7 +37,7 @@ tidy :: (Int, Int) -> (String, String)
 tidy (a,b) = (show a, show b)
 
 -- Calculate ratio of adjacent pairs with the same gear
-ratio ((a,(ax,ay)):(b,(bx,by)):xs) 
+ratio ((a,(ax,ay)):(b,(bx,by)):xs)
     | ax==bx && ay==by = (a*b):ratio xs
     | otherwise = ratio ((b,(bx,by)):xs)
 ratio [a] = error "One left"
@@ -43,7 +45,7 @@ ratio [] = []
 
 
 getPartNumber :: Map -> (Int, Int) -> Maybe Int
-getPartNumber m (x,y) = case (getNumber m x y) of
+getPartNumber m (x,y) = case getNumber m x y of
     Just n -> checkParts m x y n
     Nothing -> Nothing
 
@@ -54,7 +56,7 @@ getGearNumber m (x,y) = case (getNumber m x y) of
     Nothing -> Nothing
 
 getGear :: Map -> Int -> Int -> Int -> Maybe (Int, (Int, Int))
-getGear m x y n = if (length coords > 0) then Just (n, head coords) else Nothing
+getGear m x y n = if not (null coords) then Just (n, head coords) else Nothing
     where
         l = length (show n)
         sx = x-1
@@ -65,10 +67,10 @@ getGear m x y n = if (length coords > 0) then Just (n, head coords) else Nothing
         botP = zip [sx .. ex] (repeat ey)
         leftRight = [(sx,y), (ex,y)]
         ps = leftRight ++ topP ++ botP
-        coords = filter (\x -> (fromMaybe '.' $ getLoc m x) == '*') ps
+        coords = filter (\x -> fromMaybe '.' (getLoc m x) == '*') ps
 
 checkParts :: Map -> Int -> Int -> Int -> Maybe Int
-checkParts m x y n = if (hasPart syms) then Just n else Nothing
+checkParts m x y n = if hasPart syms then Just n else Nothing
     where
         l = length (show n)
         sx = x-1
@@ -84,7 +86,7 @@ checkParts m x y n = if (hasPart syms) then Just n else Nothing
 hasPart :: String -> Bool
 hasPart s = any isPart s
     where
-        isPart s = (not $ isDigit s) && (s /= '.')
+        isPart s = not (isDigit s) && (s /= '.')
 
 
 getNumber :: Map -> Int -> Int -> Maybe Int
@@ -92,7 +94,7 @@ getNumber m x y
     | isNumberStart m x y = Just n
     | otherwise = Nothing
         where
-            n = read $ takeWhile isDigit (drop x ((d m) !! y))
+            n = read $ takeWhile isDigit (drop x (d m !! y))
 
 isNumberStart :: Map -> Int -> Int -> Bool
 isNumberStart m x y = start && left

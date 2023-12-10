@@ -12,25 +12,27 @@ import Day06
 import Day07
 import Day08
 import Day09
+import Day10
 
 getDay :: Int -> (String -> (String,String))
-getDay 1 = day01
-getDay 2 = day02
-getDay 3 = day03
-getDay 4 = day04
-getDay 5 = day05
-getDay 6 = day06
-getDay 7 = day07
-getDay 8 = day08
-getDay 9 = day09
+getDay  1 = day01
+getDay  2 = day02
+getDay  3 = day03
+getDay  4 = day04
+getDay  5 = day05
+getDay  6 = day06
+getDay  7 = day07
+getDay  8 = day08
+getDay  9 = day09
+getDay 10 = day10
 getDay _ = day01
 
 advent :: IO ()
 advent = do
            args <- getArgs
-           input <- readFile ("Inputs/input_" ++ (head args) ++ ".txt")
-           mapM_ print (map (run input) [read (head args)])
-            
+           input <- readFile ("Inputs/input_" ++ head args ++ ".txt")
+           mapM_ (print . run input) [read (head args)]
+
 
 run :: String -> Int -> (String, String)
 run s day = (pt1, pt2)

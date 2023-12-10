@@ -46,7 +46,7 @@ asDraw d (c,i)
 
 pDraw :: Parser Draw
 pDraw = do
-    p <- pColourScore `Text.Megaparsec.sepBy` (char ',')
+    p <- pColourScore `Text.Megaparsec.sepBy` char ','
     return $ foldl asDraw (Draw 0 0 0) p
 
 pGame :: Parser Game
@@ -54,8 +54,8 @@ pGame = do
     void (string "Game ")
     gameNum <- L.decimal
     void (char ':')
-    draws <- pDraw `Text.Megaparsec.sepBy` (char ';')
-    void (newline)
+    draws <- pDraw `Text.Megaparsec.sepBy` char ';'
+    void newline
     return (gameNum, draws)
 
 parseGames :: Parser [Game]
@@ -66,17 +66,17 @@ day02 :: String -> (String, String)
 day02 s = tidy (part1 games, part2 games)
     where
         games = fromRight [(0,[])] $ runParser parseGames "" s
-    
+
 part1 :: [Game] -> Int
-part1 ds = sum $ map (\(g,_) -> g) $ filter validDraw ds
+part1 ds = sum $ map fst $ filter validDraw ds
 
 validDraw :: Game -> Bool
-validDraw (g, ds) = all (== True) $ map valid ds
+validDraw (g, ds) = all valid ds
     where
-        valid a = (red a <= 12 && green a <= 13 && blue a <= 14)
+        valid a = red a <= 12 && green a <= 13 && blue a <= 14
 
 part2 :: [Game] -> Int
-part2 gs = sum $ map (\mg-> (red mg) * (blue mg) * (green mg)) $ map minDraw gs
+part2 gs = sum $ map ((\mg-> red mg * blue mg * green mg) . minDraw) gs
 
 minDraw :: Game -> Draw
 minDraw (_, gs) = foldl (\t g -> Draw (max (red t) (red g)) (max (green t) (green g)) (max (blue t) (blue g))) (Draw 0 0 0) gs

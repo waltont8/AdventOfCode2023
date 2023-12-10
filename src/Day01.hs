@@ -5,23 +5,23 @@ module Day01
 import Lazy
 
 day01 :: String -> (String, String)
-day01 = (lines >>> (map parse1 >>> part1) &&& (map parse2 >>> part2) >>> tidy)
+day01 = lines >>> (map parse1 >>> part1) &&& (map parse2 >>> part2) >>> tidy
 
 
 parse1 :: String -> Int
 parse1 s = read res
-    where 
+    where
         nums = [ x | x <- s, x `elem` "0123456789" ]
         res = [head nums, last nums]
 
 parse2 :: String -> Int
-parse2 s = (head nums * 10) + (last nums)
-    where 
+parse2 s = (head nums * 10) + last nums
+    where
         nums = swapit s
 
 swapit :: String -> [Int]
-swapit s@(x:xs) 
-    | x `elem` "0123456789" = (readChar x):swapit xs
+swapit s@(x:xs)
+    | x `elem` "0123456789" = readChar x:swapit xs
     | "one" `isPrefixOf` s = 1:swapit xs
     | "two" `isPrefixOf` s = 2:swapit xs
     | "three" `isPrefixOf` s = 3:swapit xs
