@@ -13,6 +13,7 @@ import Day07
 import Day08
 import Day09
 import Day10
+import Day11
 
 getDay :: Int -> (String -> (String,String))
 getDay  1 = day01
@@ -25,6 +26,7 @@ getDay  7 = day07
 getDay  8 = day08
 getDay  9 = day09
 getDay 10 = day10
+getDay 11 = day11
 getDay _ = day01
 
 advent :: IO ()
